@@ -11,6 +11,8 @@ local utils = require "obs.utils"
 -- table with vault options
 ---@class obs.VaultOpts
 ---@field public vault_home string?
+---@field public journal_home string?
+---@field public templates_home string?
 ---@field public templater obs.TemplaterOpts?
 ---@field public journal obs.JournalOpts?
 ---@field public time_provider fun():number
@@ -39,12 +41,12 @@ function VaultOpts:new(opts)
         or (Path:new(Path.path.home) / "vimwiki"):expand()
 
     vault_opts.templates_home = (
-        Path:new(vault_opts.vault_home)
-        / "meta"
-        / "templates"
-    ):expand()
+        Path:new(vault_opts.vault_home) / opts.templates_home
+    ):expand() or (Path:new(vault_opts.vault_home) / "meta" / "templates"):expand()
 
-    vault_opts.journal_home = (Path:new(vault_opts.vault_home) / "diary"):expand()
+    vault_opts.journal_home = (
+        Path:new(vault_opts.vault_home) / opts.journal_home
+    ):expand() or (Path:new(vault_opts.vault_home) / "diary"):expand()
 
     local templater_opts = opts.templater or {}
     vault_opts.templater = vim.tbl_extend(
