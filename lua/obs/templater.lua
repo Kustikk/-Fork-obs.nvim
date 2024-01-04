@@ -65,6 +65,22 @@ function Templater:new(opts)
             local filename = context.filename
             return core.string_strip_suffix(filename, ".md")
         end)
+        templater:add_var_provider("date:DM", function()
+            local result = os.date "%d%m"
+            return result
+        end)
+        templater:add_var_provider("date:dd", function()
+            local result = os.date "%a"
+            return result
+        end)
+        templater:add_var_provider("time", function()
+            local result = os.date "%H:%M"
+            return result
+        end)
+        templater:add_var_provider("time:x", function()
+            local result = os.time()
+            return result
+        end)
     end
 
     return templater
